@@ -8,7 +8,6 @@ pool:
 
 variables:
   buildConfiguration: Release
-  outputPath: 'build_output'
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
@@ -18,20 +17,21 @@ steps:
   displayName: 'Publish'
   inputs:
     command: 'publish'
-    arguments: '--configuration $(buildConfiguration) --output $(outputPath)'
-    zipAfterPublish: True
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/app'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
-    PathtoPublish: '$(Build.Repository.LocalPath)/$(outputPath)'
-    ArtifactName: 'app'
-
-- task: DownloadBuildArtifacts@0
-  displayName: 'Download Build Artifacts'
-  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
     artifactName: 'app'
-    downloadPath: '$(Pipeline.Workspace)'
 
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
