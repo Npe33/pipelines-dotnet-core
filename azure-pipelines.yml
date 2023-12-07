@@ -27,6 +27,12 @@ steps:
     PathtoPublish: '$(Build.Repository.LocalPath)/$(outputPath)'
     ArtifactName: 'app'
 
+- task: DownloadBuildArtifacts@0
+  displayName: 'Download Build Artifacts'
+  inputs:
+    artifactName: 'app'
+    downloadPath: '$(Pipeline.Workspace)'
+
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
   inputs:
