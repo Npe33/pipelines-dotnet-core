@@ -35,4 +35,4 @@ steps:
     appName: 'TestPipelinesMS'
     deployToSlotOrASE: true
     resourceGroupName: 'Sandbox'
-    package: '$(Build.ArtifactStagingDirectory)/app.zip'
+    package: '$(Pipeline.Workspace)/app/$(outputPath).zip'
