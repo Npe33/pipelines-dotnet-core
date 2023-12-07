@@ -20,15 +20,6 @@ steps:
     arguments: '--configuration $(buildConfiguration) --output build_output'
     zipAfterPublish: True
 
-- task: ArchiveFiles@2
-  displayName: 'Archive files'
-  inputs:
-    rootFolderOrFile: '$(Build.Repository.LocalPath)/TestPipelinesMS/build_output'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
-    replaceExistingArchive: true
-
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
