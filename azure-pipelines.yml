@@ -24,7 +24,7 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
-    PathtoPublish: '$(Build.Repository.LocalPath)/TestPipelinesMS/$(outputPath)'
+    PathtoPublish: '$(Build.Repository.LocalPath)/$(outputPath)'
     ArtifactName: 'app'
 
 - task: AzureWebApp@1
