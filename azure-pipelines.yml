@@ -1,17 +1,46 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
-- master
+  branches:
+    include:
+      - main
 
 pool:
   vmImage: ubuntu-latest
 
 variables:
-  buildConfiguration: 'Release'
+  buildConfiguration: Release
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+  displayName: 'Build'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish'
+  inputs:
+    command: 'publish'
+    arguments: '--configuration $(buildConfiguration) --output build_output'
+    zipAfterPublish: True
+
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
+  inputs:
+    rootFolderOrFile: '$(Build.Repository.LocalPath)/TestPipelinesMS/build_output'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
+    ArtifactName: 'app'
+
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Deploy to Azure App Service'
+  inputs:
+    azureSubscription: 'Abonnement Visual Studio Professional'
+    appType: 'webApp'
+    WebAppName: 'TestPipelinesMS'
+    deployToSlotOrASE: true
+    resourceGroupName: 'Sandbox'
+    package: '$(Build.ArtifactStagingDirectory)/app.zip'
