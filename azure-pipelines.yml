@@ -35,12 +35,12 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
     ArtifactName: 'app'
 
-- task: AzureRmWebAppDeployment@4
+- task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
   inputs:
     azureSubscription: 'Abonnement Visual Studio Professional'
     appType: 'webApp'
-    WebAppName: 'TestPipelinesMS'
+    appName: 'TestPipelinesMS'
     deployToSlotOrASE: true
     resourceGroupName: 'Sandbox'
     package: '$(Build.ArtifactStagingDirectory)/app.zip'
