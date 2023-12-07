@@ -8,6 +8,7 @@ pool:
 
 variables:
   buildConfiguration: Release
+  outputPath: 'build_output'
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
@@ -17,13 +18,13 @@ steps:
   displayName: 'Publish'
   inputs:
     command: 'publish'
-    arguments: '--configuration $(buildConfiguration) --output build_output'
+    arguments: '--configuration $(buildConfiguration) --output $(outputPath)'
     zipAfterPublish: True
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
+    PathtoPublish: '$(Build.Repository.LocalPath)/YourMVCProjectFolder/$(outputPath)'
     ArtifactName: 'app'
 
 - task: AzureWebApp@1
