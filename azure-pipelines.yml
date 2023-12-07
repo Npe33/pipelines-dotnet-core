@@ -19,6 +19,9 @@ steps:
     command: 'publish'
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
 
+- script: ls -la $(Build.ArtifactStagingDirectory)/app
+  displayName: 'List Published Output'
+
 - task: ArchiveFiles@2
   displayName: 'Archive files'
   inputs:
@@ -27,11 +30,17 @@ steps:
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/build_output.zip'
 
+- script: ls -la $(Build.ArtifactStagingDirectory)
+  displayName: 'List Artifact Staging Directory'
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)/build_output.zip'
     artifactName: 'app'
+
+- script: ls -la $(Pipeline.Workspace)
+  displayName: 'List Pipeline Workspace'
 
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
