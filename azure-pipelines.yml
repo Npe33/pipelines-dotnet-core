@@ -35,4 +35,4 @@ steps:
     appName: 'TestPipelinesMS'
     deployToSlotOrASE: true
     resourceGroupName: 'Sandbox'
-    package: '$(Pipeline.Workspace)/app/$(outputPath).zip'
+    package: '$(Pipeline.Workspace)/app/build_output.zip'
