@@ -4,10 +4,10 @@ trigger:
       - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 variables:
-  buildConfiguration: Release
+  buildConfiguration: 'Release'
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
@@ -17,7 +17,7 @@ steps:
   displayName: 'Publish'
   inputs:
     command: 'publish'
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/app'
 
 - task: ArchiveFiles@2
   displayName: 'Archive files'
@@ -25,12 +25,12 @@ steps:
     rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/app'
     includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/build_output.zip'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
-    pathToPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
+    pathToPublish: '$(Build.ArtifactStagingDirectory)/build_output.zip'
     artifactName: 'app'
 
 - task: AzureWebApp@1
