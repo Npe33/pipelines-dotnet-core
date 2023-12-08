@@ -20,33 +20,10 @@ steps:
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
 
-#- script: ls -la $(Build.ArtifactStagingDirectory)/app
-#  displayName: 'List Published Output'
-
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)' 
     artifactName: 'TestPipelinesMS'
-
-#- task: ArchiveFiles@2
-#  displayName: 'Archive files'
-#  inputs:
-#    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/app'
-#    includeRootFolder: false
-#    archiveType: 'zip'
-#    archiveFile: '$(Build.ArtifactStagingDirectory)/build_output.zip'
-
-#- script: ls -la $(Build.ArtifactStagingDirectory)
-#  displayName: 'List Artifact Staging Directory'
-
-#- task: PublishBuildArtifacts@1
-#  displayName: 'Publish Artifact'
-#  inputs:
-#    pathToPublish: '$(Build.ArtifactStagingDirectory)/build_output.zip'
-#    artifactName: 'app'
-
-#- script: ls -la $(Pipeline.Workspace)
-#  displayName: 'List Pipeline Workspace'
 
 - task: AzureWebApp@1
   displayName: 'Deploy to Azure App Service'
@@ -57,17 +34,3 @@ steps:
     deployToSlotOrASE: true
     resourceGroupName: 'Sandbox'
     package: $(Build.ArtifactStagingDirectory)/**/*.zip
-
-#- task: PublishBuildArtifacts@1
-#  inputs:
-#    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-#    ArtifactName: 'TestPipelinesMS'
-#    publishLocation: 'Container'
-
-#- task: AzureRmWebAppDeployment@4
-#  inputs:
-#    ConnectionType: 'AzureRM'
-#    azureSubscription: 'AzureServiceConnection'
-#    appType: 'webApp'
-#    WebAppName: 'TestPipelinesMS'
-#    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
